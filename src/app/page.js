@@ -1,66 +1,42 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import Skills from "@/components/Skills";
+import Projects from "@/components/Projects";
+import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.js file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main>
+      <Navbar />
+      <Hero />
+      <div id="about" className="py-20 text-center">
+        <section>
+          <h2 className="text-4xl font-bold mb-6">About Me</h2>
+          <p className="max-w-3xl mx-auto text-secondary text-lg">
+            I am a passionate developer with a deep interest in building modern, scalable, and user-centric web applications. 
+            With a background in both design and engineering, I specialize in creating experiences that are not only functional 
+            but also beautiful and intuitive. My goal is to bridge the gap between technical complexity and simple, elegant design.
           </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        </section>
+      </div>
+      <Skills />
+      <Projects />
+      <Contact />
+      <Footer />
+
+      <style jsx>{`
+        .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+        .text-center { text-align: center; }
+        .text-4xl { font-size: 2.25rem; }
+        .text-lg { font-size: 1.125rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .max-w-3xl { max-width: 48rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .text-secondary { color: var(--text-secondary); }
+      `}</style>
+    </main>
   );
 }
