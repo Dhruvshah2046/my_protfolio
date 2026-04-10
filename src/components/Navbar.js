@@ -1,153 +1,84 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 
-const navLinks = [
-  { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
-  { name: "Projects", href: "#projects" },
-  { name: "Contact", href: "#contact" },
-];
-
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const fn = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
   }, []);
+
+  const linkStyle = {
+    fontFamily: "'Space Grotesk', sans-serif",
+    fontSize: "14px",
+    fontWeight: 500,
+    color: "rgba(255,255,255,0.5)",
+    letterSpacing: "-0.01em",
+    textDecoration: "none",
+    transition: "color 0.2s ease",
+  };
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass py-3" : "bg-transparent py-5"
-      }`}
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 500,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: scrolled ? "16px 48px" : "28px 48px",
+        background: scrolled ? "rgba(10,10,10,0.9)" : "transparent",
+        backdropFilter: scrolled ? "blur(20px)" : "none",
+        borderBottom: scrolled ? "1px solid rgba(255,255,255,0.04)" : "none",
+        transition: "padding 0.4s cubic-bezier(0.23,1,0.32,1), background 0.4s ease",
+      }}
     >
-      <div className="container mx-auto px-6 flex justify-between items-center max-w-7xl">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="text-2xl font-bold glow-text"
-        >
-          DS.
-        </motion.div>
+      {/* Brand – far left, styled like <YASIO/> */}
+      <a
+        href="#"
+        style={{
+          fontFamily: "'Space Grotesk', sans-serif",
+          fontWeight: 700,
+          fontSize: "16px",
+          letterSpacing: "-0.02em",
+          color: "white",
+          textDecoration: "none",
+          display: "flex",
+          alignItems: "center",
+          gap: "1px",
+        }}
+      >
+        <span style={{ color: "rgba(255,255,255,0.35)", fontWeight: 300 }}>&lt;</span>
+        <span style={{ color: "#7000FF" }}>DS</span>
+        <span style={{ color: "rgba(255,255,255,0.35)", fontWeight: 300 }}>/&gt;</span>
+      </a>
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex gap-8">
-          {navLinks.map((link, i) => (
-            <motion.a
-              key={link.name}
-              href={link.href}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="text-sm font-medium hover:text-accent-primary transition-colors uppercase tracking-wider"
-            >
-              {link.name}
-            </motion.a>
-          ))}
-        </div>
-
-        {/* Mobile Toggle */}
-        <div className="md:hidden">
-          <button onClick={() => setIsOpen(!isOpen)} className="p-2">
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
+      {/* Nav Links – far right, matching yasio exactly */}
+      <div style={{ display: "flex", gap: "36px", alignItems: "center" }}>
+        {[
+          { label: "Start", href: "#" },
+          { label: "Work", href: "#projects" },
+          { label: "About", href: "#about" },
+          { label: "Contact", href: "#contact" },
+        ].map(({ label, href }) => (
+          <a
+            key={label}
+            href={href}
+            style={linkStyle}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.95)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.5)")}
+          >
+            {label}{" "}
+            <span style={{ color: "#7000FF", fontWeight: 700 }}>/&gt;</span>
+          </a>
+        ))}
       </div>
-
-      {/* Mobile Menu */}
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          className="md:hidden glass"
-        >
-          <div className="flex flex-col p-6 gap-4">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="text-lg font-medium hover:text-accent-primary"
-              >
-                {link.name}
-              </a>
-            ))}
-          </div>
-        </motion.div>
-      )}
-
-      <style jsx>{`
-        .container {
-          margin: 0 auto;
-        }
-        .flex {
-          display: flex;
-        }
-        .justify-between {
-          justify-content: space-between;
-        }
-        .items-center {
-          align-items: center;
-        }
-        .gap-8 {
-          gap: 2rem;
-        }
-        .gap-4 {
-          gap: 1rem;
-        }
-        .mx-auto {
-          margin-left: auto;
-          margin-right: auto;
-        }
-        .px-6 {
-          padding-left: 1.5rem;
-          padding-right: 1.5rem;
-        }
-        .py-3 {
-          padding-top: 0.75rem;
-          padding-bottom: 0.75rem;
-        }
-        .py-5 {
-          padding-top: 1.25rem;
-          padding-bottom: 1.25rem;
-        }
-        .hidden {
-          display: none;
-        }
-        .md\\:flex {
-          display: flex;
-        }
-        .md\\:hidden {
-          display: none;
-        }
-        @media (min-width: 768px) {
-          .hidden {
-            display: none !important;
-          }
-          .md\\:flex {
-            display: flex !important;
-          }
-          .md\\:hidden {
-            display: none !important;
-          }
-        }
-        @media (max-width: 767px) {
-          .md\\:flex {
-            display: none !important;
-          }
-          .md\\:hidden {
-            display: block !important;
-          }
-        }
-      `}</style>
     </nav>
   );
 }

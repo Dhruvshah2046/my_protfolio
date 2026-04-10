@@ -1,4 +1,5 @@
 import "./globals.css";
+import CustomCursor from "@/components/CustomCursor";
 
 export const metadata = {
   title: "Dhruv Shah | Creative Developer & Designer",
@@ -8,7 +9,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="antialiased">
+        <CustomCursor />
+        {children}
+      </body>
     </html>
   );
 }
