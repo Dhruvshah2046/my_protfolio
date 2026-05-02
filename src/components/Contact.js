@@ -5,10 +5,10 @@ import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 
 const socials = [
-  { name: "LinkedIn", handle: "in/dhruv-shah", href: "#" },
-  { name: "GitHub",   handle: "github/dhruvshah", href: "#" },
+  { name: "LinkedIn", handle: "in/dhruv-shah", href: "https://www.linkedin.com/in/dhruvshah-dev" },
+  { name: "GitHub", handle: "github/Dhruv Shah", href: "https://github.com/Dhruvshah2046" },
   { name: "Instagram", handle: "@dhruv.creates", href: "#" },
-  { name: "Email",    handle: "hello@dhruvshah.com", href: "mailto:hello@dhruvshah.com" },
+  { name: "Email", handle: "dhruvshah0420@gmail.com", href: "mailto:dhruvshah0420@gmail.com" },
 ];
 
 const steps = [
@@ -103,12 +103,12 @@ export default function Contact() {
         overflow: "hidden",
       }}
     >
-      {/* Rail */}
-      <div style={{
+      {/* Rail — hidden on mobile via CSS class */}
+      <div className="section-rail" style={{
         position: "absolute", left: "24px", top: 0, bottom: 0, width: "1px",
         background: "linear-gradient(transparent, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.06) 80%, transparent)",
       }} />
-      <div style={{
+      <div className="section-rail" style={{
         position: "absolute", left: "20px", top: "140px", width: "9px", height: "9px",
         background: "#7000FF", borderRadius: "50%", boxShadow: "0 0 16px #7000FF",
       }} />
@@ -128,7 +128,7 @@ export default function Contact() {
           Contact /&gt;
         </motion.div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: "80px", alignItems: "flex-start" }}>
+        <div className="contact-grid">
           {/* Left — "Mad Libs" form */}
           <div>
             {!sent ? (

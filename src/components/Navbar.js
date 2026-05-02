@@ -28,18 +28,18 @@ export default function Navbar() {
         top: 0,
         left: 0,
         right: 0,
-        zIndex: 500,
+        zIndex: 1000,
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: scrolled ? "16px 48px" : "28px 48px",
-        background: scrolled ? "rgba(10,10,10,0.9)" : "transparent",
-        backdropFilter: scrolled ? "blur(20px)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(255,255,255,0.04)" : "none",
-        transition: "padding 0.4s cubic-bezier(0.23,1,0.32,1), background 0.4s ease",
+        padding: scrolled ? "16px 24px" : "28px 24px",
+        background: scrolled ? "rgba(10,10,10,0.85)" : "transparent",
+        backdropFilter: scrolled ? "blur(12px)" : "none",
+        borderBottom: scrolled ? "1px solid rgba(255,255,255,0.06)" : "none",
+        transition: "all 0.4s cubic-bezier(0.23,1,0.32,1)",
       }}
     >
-      {/* Brand – far left, styled like <YASIO/> */}
+      {/* Brand */}
       <a
         href="#"
         style={{
@@ -55,12 +55,12 @@ export default function Navbar() {
         }}
       >
         <span style={{ color: "rgba(255,255,255,0.35)", fontWeight: 300 }}>&lt;</span>
-        <span style={{ color: "#7000FF" }}>DS</span>
+        <span style={{ color: "#7000FF" }}>DHRUV</span>
         <span style={{ color: "rgba(255,255,255,0.35)", fontWeight: 300 }}>/&gt;</span>
       </a>
 
-      {/* Nav Links – far right, matching yasio exactly */}
-      <div style={{ display: "flex", gap: "36px", alignItems: "center" }}>
+      {/* Desktop nav links */}
+      <div className="nav-links">
         {[
           { label: "Start", href: "#" },
           { label: "Work", href: "#projects" },
@@ -79,6 +79,23 @@ export default function Navbar() {
           </a>
         ))}
       </div>
+
+      {/* Mobile CTA — shown via CSS */}
+      <a
+        href="#contact"
+        className="nav-cta"
+        style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: "11px",
+          color: "#7000FF",
+          border: "1px solid rgba(112,0,255,0.4)",
+          padding: "8px 16px",
+          borderRadius: "100px",
+          letterSpacing: "0.05em",
+        }}
+      >
+        Let&apos;s talk
+      </a>
     </nav>
   );
 }

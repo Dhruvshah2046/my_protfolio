@@ -23,15 +23,15 @@ const lines = [
   { num: "05", tokens: [{ t: "  ", c: C.base }, { t: "constructor", c: C.func }, { t: "() {", c: C.base }] },
   { num: "06", tokens: [{ t: "    ", c: C.base }, { t: "this", c: C.keyword }, { t: ".name", c: C.base }, { t: " = ", c: C.punct }, { t: "'Dhruv Shah'", c: C.string }] },
   { num: "07", tokens: [{ t: "    ", c: C.base }, { t: "this", c: C.keyword }, { t: ".role", c: C.base }, { t: " = ", c: C.punct }, { t: "'Creative Developer & Designer'", c: C.string }] },
-  { num: "08", tokens: [{ t: "    ", c: C.base }, { t: "this", c: C.keyword }, { t: ".email", c: C.base }, { t: " = ", c: C.punct }, { t: "'hello@dhruvshah.com'", c: C.string }] },
+  { num: "08", tokens: [{ t: "    ", c: C.base }, { t: "this", c: C.keyword }, { t: ".email", c: C.base }, { t: " = ", c: C.punct }, { t: "'dhruvshah0420@gmail.com'", c: C.string }] },
   { num: "09", tokens: [{ t: "    ", c: C.base }, { t: "this", c: C.keyword }, { t: ".based", c: C.base }, { t: " = ", c: C.punct }, { t: "'India'", c: C.string }] },
   { num: "10", tokens: [{ t: "  }", c: C.base }] },
   { num: "11", tokens: [] },
   { num: "12", tokens: [{ t: "  ", c: C.base }, { t: "workExperience", c: C.func }, { t: "() {", c: C.base }] },
   { num: "13", tokens: [{ t: "    return [", c: C.base }] },
   { num: "14", tokens: [{ t: "      { ", c: C.base }, { t: "'2024-now'", c: C.str2 }, { t: " : ", c: C.base }, { t: "'Freelance Full-stack Developer'", c: C.string }, { t: " },", c: C.base }] },
-  { num: "15", tokens: [{ t: "      { ", c: C.base }, { t: "'2022-2024'", c: C.str2 }, { t: " : ", c: C.base }, { t: "'UI/UX Designer @ Creative Studio'", c: C.string }, { t: " },", c: C.base }] },
-  { num: "16", tokens: [{ t: "      { ", c: C.base }, { t: "'2020-2022'", c: C.str2 }, { t: " : ", c: C.base }, { t: "'Frontend Dev @ Startup'", c: C.string }, { t: " }",  c: C.base }] },
+  { num: "15", tokens: [{ t: "      { ", c: C.base }, { t: "'2022-2024'", c: C.str2 }, { t: " : ", c: C.base }, { t: "'UI/UX Designer'", c: C.string }, { t: " },", c: C.base }] },
+  { num: "16", tokens: [{ t: "      { ", c: C.base }, { t: "'2020-2022'", c: C.str2 }, { t: " : ", c: C.base }, { t: "'Frontend Dev'", c: C.string }, { t: " }", c: C.base }] },
   { num: "17", tokens: [{ t: "    ]", c: C.base }] },
   { num: "18", tokens: [{ t: "  }", c: C.base }] },
   { num: "19", tokens: [] },
@@ -70,7 +70,7 @@ export default function CodeBiography() {
         marginBottom: "16px",
         marginTop: "-16px",
       }}>
-        {["#ff5f56","#ffbd2e","#27c93f"].map((c, i) => (
+        {["#ff5f56", "#ffbd2e", "#27c93f"].map((c, i) => (
           <div key={i} style={{ width: 10, height: 10, borderRadius: "50%", background: c, marginRight: 6 }} />
         ))}
         <span style={{

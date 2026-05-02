@@ -1,56 +1,77 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useSpring } from "framer-motion";
+import { useState, useEffect } from "react";
 
 export default function CustomCursor() {
   const [cursorType, setCursorType] = useState("default");
-
-  // Outer ring — heavy spring = lag effect
-  const rx = useSpring(0, { stiffness: 65, damping: 16, mass: 0.9 });
-  const ry = useSpring(0, { stiffness: 65, damping: 16, mass: 0.9 });
-  // Inner dot — snap fast
-  const dx = useSpring(0, { stiffness: 800, damping: 50 });
-  const dy = useSpring(0, { stiffness: 800, damping: 50 });
+  const [isTouch, setIsTouch] = useState(true); // default true to avoid flicker
 
   useEffect(() => {
+    // Only show custom cursor on devices with a fine pointer (mouse)
+    const isMouseDevice = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    setIsTouch(!isMouseDevice);
+  }, []);
+
+  // Spring simulation using requestAnimationFrame
+  const [outerPos, setOuterPos] = useState({ x: -200, y: -200 });
+  const [innerPos, setInnerPos] = useState({ x: -200, y: -200 });
+
+  useEffect(() => {
+    if (isTouch) return;
+
+    let outerX = -200, outerY = -200;
+    let innerX = -200, innerY = -200;
+    let mouseX = -200, mouseY = -200;
+    let rafId;
+
     const onMove = (e) => {
-      rx.set(e.clientX);
-      ry.set(e.clientY);
-      dx.set(e.clientX);
-      dy.set(e.clientY);
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      innerX = e.clientX;
+      innerY = e.clientY;
+      setInnerPos({ x: e.clientX, y: e.clientY });
 
       const el = e.target;
       if (el.closest(".view-trigger")) {
         setCursorType("view");
-      } else if (el.closest("a") || el.closest("button") || el.tagName === "INPUT") {
+      } else if (el.closest("a") || el.closest("button")) {
         setCursorType("hover");
       } else {
         setCursorType("default");
       }
     };
 
+    const animate = () => {
+      outerX += (mouseX - outerX) * 0.12;
+      outerY += (mouseY - outerY) * 0.12;
+      setOuterPos({ x: outerX, y: outerY });
+      rafId = requestAnimationFrame(animate);
+    };
+
     window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, [rx, ry, dx, dy]);
+    rafId = requestAnimationFrame(animate);
+
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(rafId);
+    };
+  }, [isTouch]);
+
+  if (isTouch) return null;
 
   const ringDim = cursorType === "view" ? 120 : cursorType === "hover" ? 48 : 36;
 
   return (
     <>
-      {/* Outer ring — always a perfect circle */}
-      <motion.div
-        className="cursor-ring"
+      {/* Outer ring */}
+      <div
         style={{
           position: "fixed",
           top: 0,
           left: 0,
           width: ringDim,
           height: ringDim,
-          x: rx,
-          y: ry,
-          translateX: "-50%",
-          translateY: "-50%",
+          transform: `translate(${outerPos.x - ringDim / 2}px, ${outerPos.y - ringDim / 2}px)`,
           borderRadius: "50%",
           border: cursorType === "view"
             ? "1.5px solid rgba(112,0,255,0.85)"
@@ -63,40 +84,32 @@ export default function CustomCursor() {
           alignItems: "center",
           justifyContent: "center",
           overflow: "hidden",
-          transition: "width 0.45s cubic-bezier(0.23,1,0.32,1), height 0.45s cubic-bezier(0.23,1,0.32,1), border 0.3s ease, background 0.3s ease, box-shadow 0.3s ease",
+          transition: "width 0.45s cubic-bezier(0.23,1,0.32,1), height 0.45s cubic-bezier(0.23,1,0.32,1), border 0.3s ease",
         }}
       >
         {cursorType === "view" && (
-          <motion.svg
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+          <svg
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", animation: "spin 7s linear infinite" }}
             viewBox="0 0 100 100"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
           >
-            <path
-              id="cp"
-              fill="none"
-              d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1,-72,0"
-            />
+            <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+            <path id="cp" fill="none" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1,-72,0" />
             <text fill="rgba(112,0,255,1)" fontSize="8.5" fontFamily="'JetBrains Mono',monospace" fontWeight="700" letterSpacing="2.5">
               <textPath href="#cp">VIEW PROJECT • VIEW PROJECT •</textPath>
             </text>
-          </motion.svg>
+          </svg>
         )}
-      </motion.div>
+      </div>
 
       {/* Inner dot */}
-      <motion.div
+      <div
         style={{
           position: "fixed",
           top: 0,
           left: 0,
           width: cursorType === "view" ? 5 : 7,
           height: cursorType === "view" ? 5 : 7,
-          x: dx,
-          y: dy,
-          translateX: "-50%",
-          translateY: "-50%",
+          transform: `translate(${innerPos.x - (cursorType === "view" ? 2.5 : 3.5)}px, ${innerPos.y - (cursorType === "view" ? 2.5 : 3.5)}px)`,
           borderRadius: "50%",
           background: cursorType === "view" ? "#7000FF" : "#ffffff",
           boxShadow: cursorType === "view"
@@ -104,7 +117,7 @@ export default function CustomCursor() {
             : "0 0 8px 2px rgba(255,255,255,0.75)",
           pointerEvents: "none",
           zIndex: 99999,
-          transition: "width 0.2s ease, height 0.2s ease, background 0.2s ease",
+          transition: "width 0.2s ease, height 0.2s ease",
         }}
       />
     </>
