@@ -56,6 +56,7 @@ function InlineInput({ placeholder, value, onChange }) {
       type="text"
       placeholder={placeholder}
       value={value}
+      maxLength={100}
       onChange={(e) => onChange(e.target.value)}
       style={{
         background: "transparent",
@@ -69,7 +70,7 @@ function InlineInput({ placeholder, value, onChange }) {
         letterSpacing: "inherit",
         padding: "0 6px 4px",
         width: value ? `${Math.max(value.length + 1, placeholder.length)}ch` : `${placeholder.length}ch`,
-        transition: "border-color 0.3s ease",
+        transition: "all 0.3s ease",
       }}
       onFocus={(e) => (e.currentTarget.style.borderColor = "#7000FF")}
       onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)")}
@@ -79,18 +80,42 @@ function InlineInput({ placeholder, value, onChange }) {
 
 export default function Contact() {
   const [step, setStep] = useState(0);
-  const [data, setData] = useState({ name: "", email: "", project: "", budget: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", project: "", budget: "" });
   const [sent, setSent] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
 
   const canNext = step === 0
-    ? data.name.trim() && data.email.trim()
-    : data.project.trim() && data.budget.trim();
+    ? formData.name.trim() && formData.email.trim() && !isSubmitting
+    : formData.project.trim() && formData.budget.trim() && !isSubmitting;
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step < steps.length - 1) {
       setStep(step + 1);
     } else {
-      setSent(true);
+      setIsSubmitting(true);
+      setSubmitStatus(null);
+      
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          setSent(true);
+          setSubmitStatus("success");
+        } else {
+          setSubmitStatus("error");
+          alert("Something went wrong. Please try again.");
+        }
+      } catch (error) {
+        setSubmitStatus("error");
+        alert("Failed to send message. Please check your connection.");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -148,12 +173,13 @@ export default function Contact() {
                     marginBottom: "60px",
                   }}
                 >
-                  {steps[step].prompt(data, setData)}
+                  {steps[step].prompt(formData, setFormData)}
                 </motion.div>
 
                 <div style={{ display: "flex", alignItems: "center", gap: "32px" }}>
                   <button
                     onClick={handleNext}
+                    disabled={!canNext || isSubmitting}
                     style={{
                       display: "inline-flex",
                       alignItems: "center",
@@ -167,15 +193,15 @@ export default function Contact() {
                       border: "none",
                       padding: "14px 32px",
                       borderRadius: "100px",
-                      cursor: canNext ? "auto" : "auto",
-                      opacity: canNext ? 1 : 0.5,
+                      cursor: canNext && !isSubmitting ? "pointer" : "not-allowed",
+                      opacity: canNext && !isSubmitting ? 1 : 0.5,
                       transition: "background 0.3s ease, opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease",
-                      boxShadow: canNext ? "0 12px 35px -8px rgba(112,0,255,0.55)" : "none",
+                      boxShadow: canNext && !isSubmitting ? "0 12px 35px -8px rgba(112,0,255,0.55)" : "none",
                     }}
-                    onMouseEnter={(e) => canNext && (e.currentTarget.style.transform = "translateY(-2px)")}
+                    onMouseEnter={(e) => canNext && !isSubmitting && (e.currentTarget.style.transform = "translateY(-2px)")}
                     onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
                   >
-                    {step === steps.length - 1 ? "Send Message" : "Continue"}
+                    {isSubmitting ? "Sending..." : step === steps.length - 1 ? "Send Message" : "Continue"}
                     <ArrowRight size={14} />
                   </button>
                   <span style={{
@@ -234,6 +260,8 @@ export default function Contact() {
                 <a
                   key={name}
                   href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -242,15 +270,17 @@ export default function Contact() {
                     borderBottom: "1px solid rgba(255,255,255,0.05)",
                     color: "rgba(255,255,255,0.45)",
                     textDecoration: "none",
-                    transition: "color 0.2s ease",
+                    transition: "all 0.3s cubic-bezier(0.23, 1, 0.32, 1)",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.color = "white";
-                    e.currentTarget.style.borderBottomColor = "rgba(255,255,255,0.15)";
+                    e.currentTarget.style.borderBottomColor = "#7000FF";
+                    e.currentTarget.style.paddingLeft = "8px";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.color = "rgba(255,255,255,0.45)";
                     e.currentTarget.style.borderBottomColor = "rgba(255,255,255,0.05)";
+                    e.currentTarget.style.paddingLeft = "0px";
                   }}
                 >
                   <span style={{

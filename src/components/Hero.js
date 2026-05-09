@@ -132,7 +132,7 @@ export default function Hero() {
             fontFamily: "'Newsreader', serif",
             fontStyle: "italic",
             fontWeight: 400,
-            color: "rgba(255,255,255,0.55)",
+            color: "#7c5dbbee",
             fontSize: "0.9em",
           }}>
             design
