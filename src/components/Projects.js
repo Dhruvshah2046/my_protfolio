@@ -130,7 +130,7 @@ function useTilt(ref) {
   const [glare, setGlare] = useState({ opacity: 0, rotate: 180 });
 
   const onMove = useCallback((e) => {
-    if (!ref.current) return;
+    if (!ref.current || window.innerWidth <= 1024) return;
     const rect = ref.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width;
     const y = (e.clientY - rect.top) / rect.height;
@@ -189,6 +189,7 @@ function ProjectCard({ project, index, onSelect }) {
           transform,
           transition: "transform 0.4s cubic-bezier(0.23,1,0.32,1)",
           cursor: "pointer",
+          perspective: typeof window !== "undefined" && window.innerWidth > 1024 ? "1000px" : "none",
         }}
       >
         <div style={{ position: "relative", overflow: "hidden", borderRadius: "2px" }}>
@@ -214,27 +215,7 @@ function ProjectCard({ project, index, onSelect }) {
             pointerEvents: "none",
             opacity: isHovered ? 0 : 1,
             transition: "opacity 0.4s ease",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}>
-            {/* Mobile-only CTA button inside the image area */}
-            <div className="mobile-only" style={{ 
-              pointerEvents: "auto",
-              background: "#7000FF",
-              color: "white",
-              padding: "10px 20px",
-              borderRadius: "100px",
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "10px",
-              fontWeight: 700,
-              letterSpacing: "0.1em",
-              boxShadow: "0 10px 30px rgba(112,0,255,0.4)",
-              transform: "translateY(20px)",
-            }}>
-              VIEW CASE STUDY
-            </div>
-          </div>
+          }} />
         </div>
 
         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", overflow: "hidden", pointerEvents: "none" }}>
@@ -308,21 +289,16 @@ function ProjectModal({ project, onClose }) {
     >
       <style>{`
         .project-modal-container { flex-direction: row; }
-        .project-modal-iframe { width: 70%; height: 100%; border-right: 1px solid rgba(255,255,255,0.1); }
+        .project-modal-iframe-container { width: 70%; height: 100%; border-right: 1px solid rgba(255,255,255,0.1); display: flex; }
         .project-modal-details { width: 30%; height: 100%; display: flex; flex-direction: column; }
         @media (max-width: 1024px) {
           .project-modal-container { flex-direction: column; }
-          .project-modal-iframe { width: 100%; height: 60%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
-          .project-modal-details { width: 100%; height: 40%; }
+          .project-modal-iframe-container { display: none; }
+          .project-modal-details { width: 100%; height: 100%; }
         }
       `}</style>
 
-      <motion.div
-        className="project-modal-iframe"
-        initial={{ x: "-100%" }} animate={{ x: 0 }} exit={{ x: "-100%" }}
-        transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-        style={{ position: "relative", background: "#000" }}
-      >
+      <div className="project-modal-iframe-container" style={{ position: "relative", width: "70%", height: "100%" }}>
         <div style={{
           position: "absolute", inset: 0, display: "flex",
           alignItems: "center", justifyContent: "center",
@@ -336,7 +312,7 @@ function ProjectModal({ project, onClose }) {
           title={project.title}
           style={{ position: "relative", zIndex: 2, width: "100%", height: "100%", border: "none", background: "white" }}
         />
-      </motion.div>
+      </div>
 
       <motion.div
         className="project-modal-details"
@@ -394,8 +370,6 @@ function ProjectModal({ project, onClose }) {
             </a>
           </h2>
 
-          <div style={{ height: "1px", background: "rgba(112,0,255,0.25)", margin: "24px 0 32px" }} />
-
           {project.demoUrl && (
             <div style={{ marginBottom: "32px" }}>
               <a 
@@ -406,36 +380,34 @@ function ProjectModal({ project, onClose }) {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "10px",
-                  padding: "12px 24px",
-                  background: "rgba(112,0,255,0.1)",
-                  border: "1px solid rgba(112,0,255,0.3)",
+                  padding: "14px 28px",
+                  background: "#7000FF",
+                  border: "none",
                   borderRadius: "100px",
                   fontFamily: "'Space Grotesk', sans-serif",
                   fontSize: "14px",
-                  fontWeight: 600,
+                  fontWeight: 700,
                   color: "white",
                   textDecoration: "none",
                   transition: "all 0.3s cubic-bezier(0.23, 1, 0.32, 1)",
-                  boxShadow: "0 0 20px rgba(112,0,255,0.1)",
+                  boxShadow: "0 10px 25px rgba(112,0,255,0.4)",
                 }}
                 onMouseEnter={(e) => { 
-                  e.currentTarget.style.background = "#7000FF"; 
-                  e.currentTarget.style.borderColor = "#7000FF";
                   e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 10px 25px rgba(112,0,255,0.4)";
+                  e.currentTarget.style.boxShadow = "0 15px 35px rgba(112,0,255,0.5)";
                 }}
                 onMouseLeave={(e) => { 
-                  e.currentTarget.style.background = "rgba(112,0,255,0.1)"; 
-                  e.currentTarget.style.borderColor = "rgba(112,0,255,0.3)";
                   e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 0 20px rgba(112,0,255,0.1)";
+                  e.currentTarget.style.boxShadow = "0 10px 25px rgba(112,0,255,0.4)";
                 }}
               >
-                {project.demoUrl.endsWith(".pdf") ? "Open Document" : "Visit Website"}
+                {project.demoUrl.endsWith(".pdf") ? "Open Document" : "Visit Live Site"}
                 <span style={{ fontSize: "16px" }}>↗</span>
               </a>
             </div>
           )}
+
+          <div style={{ height: "1px", background: "rgba(112,0,255,0.15)", margin: "0 0 32px" }} />
 
           <BriefRenderer sections={project.briefSections} />
 
