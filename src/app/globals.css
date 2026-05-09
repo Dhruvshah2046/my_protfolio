@@ -110,6 +110,15 @@ body::after {
   overflow: hidden;
 }
 
+.hero-content {
+  padding-left: 48px;
+}
+@media (max-width: 768px) {
+  .hero-content {
+    padding-left: 0;
+  }
+}
+
 /* ─── Section content wrapper ────────────────────────────── */
 .section-inner {
   max-width: 1280px;

@@ -70,6 +70,8 @@ function InlineInput({ placeholder, value, onChange }) {
         letterSpacing: "inherit",
         padding: "0 6px 4px",
         width: value ? `${Math.max(value.length + 1, placeholder.length)}ch` : `${placeholder.length}ch`,
+        maxWidth: "100%",
+        boxSizing: "border-box",
         transition: "all 0.3s ease",
       }}
       onFocus={(e) => (e.currentTarget.style.borderColor = "#7000FF")}

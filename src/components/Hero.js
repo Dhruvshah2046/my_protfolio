@@ -90,7 +90,7 @@ export default function Hero() {
       </div>
 
       {/* Main content */}
-      <div style={{ position: "relative", zIndex: 2, paddingLeft: "40px", width: "100%" }}>
+      <div className="hero-content" style={{ position: "relative", zIndex: 2, width: "100%" }}>
         <motion.div {...fadeUp(0)} style={{
           fontFamily: "'JetBrains Mono', monospace",
           fontSize: "11px",

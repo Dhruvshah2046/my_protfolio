@@ -214,7 +214,27 @@ function ProjectCard({ project, index, onSelect }) {
             pointerEvents: "none",
             opacity: isHovered ? 0 : 1,
             transition: "opacity 0.4s ease",
-          }} />
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+            {/* Mobile-only CTA button inside the image area */}
+            <div className="mobile-only" style={{ 
+              pointerEvents: "auto",
+              background: "#7000FF",
+              color: "white",
+              padding: "10px 20px",
+              borderRadius: "100px",
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "10px",
+              fontWeight: 700,
+              letterSpacing: "0.1em",
+              boxShadow: "0 10px 30px rgba(112,0,255,0.4)",
+              transform: "translateY(20px)",
+            }}>
+              VIEW CASE STUDY
+            </div>
+          </div>
         </div>
 
         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", overflow: "hidden", pointerEvents: "none" }}>
@@ -342,7 +362,7 @@ function ProjectModal({ project, onClose }) {
             style={{
               background: "rgba(255,255,255,0.05)",
               border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "50%", width: "40px", height: "40px",
+              borderRadius: "50%", width: "48px", height: "48px",
               display: "flex", alignItems: "center", justifyContent: "center",
               color: "white", cursor: "pointer",
               transition: "background 0.2s, transform 0.2s",
@@ -350,11 +370,11 @@ function ProjectModal({ project, onClose }) {
             onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "scale(1.05)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.transform = "scale(1)"; }}
           >
-            <X size={18} />
+            <X size={24} />
           </button>
         </div>
 
-        <div style={{ padding: "36px 32px", overflowY: "auto", flex: 1 }}>
+        <div style={{ padding: "clamp(24px, 4vw, 40px) clamp(20px, 3vw, 32px)", overflowY: "auto", flex: 1 }}>
           <h2 style={{
             fontFamily: "'Space Grotesk', sans-serif",
             fontSize: "clamp(28px, 2.6vw, 44px)",
