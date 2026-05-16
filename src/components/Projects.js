@@ -292,6 +292,8 @@ function ProjectCard({ project, index, onSelect }) {
 
 /* ─── Project Modal ─── */
 function ProjectModal({ project, onClose }) {
+  const [showInfo, setShowInfo] = useState(false);
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
@@ -307,46 +309,25 @@ function ProjectModal({ project, onClose }) {
         position: "fixed", inset: 0, zIndex: 9999,
         background: "rgba(10,10,10,0.95)",
         backdropFilter: "blur(20px)",
-        display: "flex", flexDirection: "row",
       }}
       className="project-modal-container"
     >
       <style>{`
-        .project-modal-container { flex-direction: row; }
-        .project-modal-iframe-container { width: 60%; height: 100%; border-right: 1px solid rgba(255,255,255,0.1); display: flex; }
-        .project-modal-details { width: 40%; height: 100%; display: flex; flex-direction: column; }
-        @media (max-width: 1100px) {
-          .project-modal-container { 
-            flex-direction: column !important; 
-            overflow-y: auto !important; 
-            overflow-x: hidden !important; 
-            background: #0a0a0a !important; 
-            position: relative !important;
-          }
-          .project-modal-iframe-container { 
-            width: 100% !important; 
-            height: 50vh !important; 
-            border-right: none !important; 
-            border-bottom: 1px solid rgba(112,0,255,0.3) !important; 
-            display: flex !important; 
-            flex-shrink: 0 !important;
-            background: #000 !important;
-          }
-          .project-modal-details { 
-            width: 100% !important; 
-            height: auto !important; 
-            min-height: 50vh !important;
-            background: #0a0a0a !important;
-            transform: none !important;
-            display: block !important;
-          }
-          .project-modal-header { padding: 24px 24px 12px !important; }
-          .project-modal-content { padding: 0 24px 100px !important; overflow: visible !important; }
-          .mobile-handle { display: block !important; }
+        .project-modal-container { position: relative; }
+        .project-modal-details { 
+          position: absolute; top: 0; right: 0; bottom: 0; 
+          width: 400px; z-index: 500; 
+          background: #0a0a0a; border-left: 1px solid rgba(255,255,255,0.1); 
+          display: flex; flex-direction: column; 
+          box-shadow: -20px 0 50px rgba(0,0,0,0.5);
+        }
+        @media (max-width: 1024px) {
+          .project-modal-details { width: 100%; border-left: none; }
+          .project-modal-header { padding: 24px !important; }
         }
       `}</style>
 
-      <div className="project-modal-iframe-container" style={{ position: "relative", width: "70%", height: "100%" }}>
+      <div className="project-modal-iframe-container" style={{ position: "relative", width: "100%", height: "100%" }}>
         <div style={{
           position: "absolute", inset: 0, display: "flex",
           alignItems: "center", justifyContent: "center",
@@ -360,14 +341,74 @@ function ProjectModal({ project, onClose }) {
           title={project.title}
           style={{ position: "relative", zIndex: 2, width: "100%", height: "100%", border: "none", background: "white" }}
         />
+        
+        {/* Toggle Button for Details */}
+        <button
+          onClick={() => setShowInfo(!showInfo)}
+          style={{
+            position: "absolute",
+            bottom: "32px",
+            right: "32px",
+            zIndex: 1000,
+            padding: "16px 24px",
+            background: "rgba(10,10,10,0.8)",
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(112,0,255,0.4)",
+            borderRadius: "100px",
+            color: "white",
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: "14px",
+            fontWeight: 600,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+            transition: "all 0.3s ease",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.borderColor = "#7000FF"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(112,0,255,0.4)"; }}
+        >
+          {showInfo ? <X size={18} /> : "Project Info"}
+          {!showInfo && <span style={{ opacity: 0.6 }}>ℹ</span>}
+        </button>
+
+        {/* Back Button */}
+        <button
+          onClick={onClose}
+          style={{
+            position: "absolute",
+            top: "32px",
+            left: "32px",
+            zIndex: 1000,
+            width: "48px",
+            height: "48px",
+            background: "rgba(10,10,10,0.8)",
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: "50%",
+            color: "white",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "all 0.3s ease",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.background = "rgba(10,10,10,1)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.background = "rgba(10,10,10,0.8)"; }}
+        >
+          <X size={24} />
+        </button>
       </div>
 
-      <motion.div
-        className="project-modal-details"
-        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
-        transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-        style={{ background: "#0a0a0a", position: "relative" }}
-      >
+      <AnimatePresence>
+        {showInfo && (
+          <motion.div
+            className="project-modal-details"
+            initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
+            transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+            style={{ background: "#0a0a0a", position: "absolute", top: 0, right: 0, bottom: 0 }}
+          >
         <div className="mobile-handle" style={{
           display: "none", width: "36px", height: "4px", 
           background: "rgba(255,255,255,0.15)", borderRadius: "2px",
@@ -497,8 +538,10 @@ function ProjectModal({ project, onClose }) {
           <div style={{ height: "48px" }} />
         </div>
       </motion.div>
-    </motion.div>
-  );
+    )}
+  </AnimatePresence>
+</motion.div>
+);
 }
 
 /* ─── Main Section ─── */
