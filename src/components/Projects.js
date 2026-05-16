@@ -85,6 +85,25 @@ const projects = [
     demoUrl: "/documents/virtualpainter.pdf",
     tech: ["Python", "OpenCV", "MediaPipe", "NumPy"],
   },
+  {
+    num: "05",
+    title: "Roronoa Zoro\nLegend Experience",
+    img: "/images/zoro-project.png",
+    href: "#",
+    type: "h",
+    colWidth: "50%",
+    mt: 80,
+    ml: 40,
+    briefSections: [
+      { title: "The Legend's Path", body: "A cinematic tribute to Roronoa Zoro, the Pirate Hunter who vowed to become the World's Greatest Swordsman. This project explores the journey of a man who carries the dreams of a fallen friend and the weight of his own promise, manifested through a high-fidelity 3D digital experience." },
+      { title: "Master of Santoryu", body: "The interface mirrors Zoro's discipline and strength. Using advanced Three.js rendering, users can interact with a detailed 3D model that showcases the iconic Three Sword Style. Every angle reflects the grit and intensity of a warrior who has survived countless battles on the Grand Line." },
+      { title: "Breath of All Things", body: "Just as Zoro learns to cut through steel by sensing its rhythm, the site uses GSAP-driven scroll orchestration to reveal its story. The motion design is sharp and decisive, echoing the precision of a sword stroke, with fluid transitions that lead the viewer through the narrative." },
+      { title: "Indomitable Will", body: "The aesthetic is dark, moody, and powerful. Custom shaders and post-processing effects create an atmosphere of high-stakes confrontation. The visual language captures the 'Ashura' spirit — a manifestation of willpower that defies the limits of the human body." },
+      { title: "A Promise Beyond Death", body: "The project isn't just a technical showcase; it's a storytelling medium. It integrates character lore with cutting-edge web technology, proving that digital platforms can be as evocative as the greatest manga panels." },
+    ],
+    demoUrl: "https://dogstudio-zoro-clone.vercel.app/",
+    tech: ["Three.js", "React", "GSAP", "Framer Motion", "GLSL"],
+  },
 ];
 
 /* ─── Brief Renderer ─── */
@@ -125,7 +144,7 @@ function BriefRenderer({ sections }) {
 /* ─── Tilt effect hook ─── */
 function useTilt(ref) {
   const [transform, setTransform] = useState(
-    "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)"
+    "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)"
   );
   const [glare, setGlare] = useState({ opacity: 0, rotate: 180 });
 
@@ -145,7 +164,7 @@ function useTilt(ref) {
   }, [ref]);
 
   const onLeave = useCallback(() => {
-    setTransform("perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)");
+    setTransform("perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)");
     setGlare({ opacity: 0, rotate: 180 });
   }, []);
 
@@ -157,6 +176,11 @@ function ProjectCard({ project, index, onSelect }) {
   const ref = useRef(null);
   const tiltRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [hasPerspective, setHasPerspective] = useState(false);
+
+  useEffect(() => {
+    if (window.innerWidth > 1024) setHasPerspective(true);
+  }, []);
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const parallaxOffset = index % 2 === 0 ? 40 : -40;
@@ -189,7 +213,7 @@ function ProjectCard({ project, index, onSelect }) {
           transform,
           transition: "transform 0.4s cubic-bezier(0.23,1,0.32,1)",
           cursor: "pointer",
-          perspective: typeof window !== "undefined" && window.innerWidth > 1024 ? "1000px" : "none",
+          perspective: hasPerspective ? "1000px" : "none",
         }}
       >
         <div style={{ position: "relative", overflow: "hidden", borderRadius: "2px" }}>
@@ -293,8 +317,8 @@ function ProjectModal({ project, onClose }) {
         .project-modal-details { width: 30%; height: 100%; display: flex; flex-direction: column; }
         @media (max-width: 1024px) {
           .project-modal-container { flex-direction: column; }
-          .project-modal-iframe-container { display: none; }
-          .project-modal-details { width: 100%; height: 100%; }
+          .project-modal-iframe-container { width: 100% !important; height: 45% !important; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex !important; }
+          .project-modal-details { width: 100% !important; height: 55% !important; }
         }
       `}</style>
 
