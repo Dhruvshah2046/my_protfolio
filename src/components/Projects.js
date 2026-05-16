@@ -316,22 +316,33 @@ function ProjectModal({ project, onClose }) {
         .project-modal-iframe-container { width: 70%; height: 100%; border-right: 1px solid rgba(255,255,255,0.1); display: flex; }
         .project-modal-details { width: 30%; height: 100%; display: flex; flex-direction: column; }
         @media (max-width: 1024px) {
-          .project-modal-container { flex-direction: column; overflow-y: auto; }
+          .project-modal-container { 
+            flex-direction: column !important; 
+            overflow-y: auto !important; 
+            overflow-x: hidden !important; 
+            background: #0a0a0a !important; 
+            position: relative !important;
+          }
           .project-modal-iframe-container { 
             width: 100% !important; 
-            height: 60vh !important; 
-            border-right: none; 
-            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            height: 50vh !important; 
+            border-right: none !important; 
+            border-bottom: 1px solid rgba(112,0,255,0.3) !important; 
             display: flex !important; 
-            flex-shrink: 0;
+            flex-shrink: 0 !important;
+            background: #000 !important;
           }
           .project-modal-details { 
             width: 100% !important; 
             height: auto !important; 
-            min-height: 40vh;
+            min-height: 50vh !important;
+            background: #0a0a0a !important;
+            transform: none !important;
+            display: block !important;
           }
-          .project-modal-header { padding: 20px 24px !important; }
-          .project-modal-content { padding: 24px 20px !important; }
+          .project-modal-header { padding: 24px 24px 12px !important; }
+          .project-modal-content { padding: 0 24px 100px !important; overflow: visible !important; }
+          .mobile-handle { display: block !important; }
         }
       `}</style>
 
@@ -353,10 +364,15 @@ function ProjectModal({ project, onClose }) {
 
       <motion.div
         className="project-modal-details"
-        initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
-        transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
+        transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
         style={{ background: "#0a0a0a", position: "relative" }}
       >
+        <div className="mobile-handle" style={{
+          display: "none", width: "36px", height: "4px", 
+          background: "rgba(255,255,255,0.15)", borderRadius: "2px",
+          margin: "12px auto 0", flexShrink: 0
+        }} />
         <div 
           className="project-modal-header"
           style={{
