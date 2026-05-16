@@ -316,9 +316,22 @@ function ProjectModal({ project, onClose }) {
         .project-modal-iframe-container { width: 70%; height: 100%; border-right: 1px solid rgba(255,255,255,0.1); display: flex; }
         .project-modal-details { width: 30%; height: 100%; display: flex; flex-direction: column; }
         @media (max-width: 1024px) {
-          .project-modal-container { flex-direction: column; }
-          .project-modal-iframe-container { width: 100% !important; height: 45% !important; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex !important; }
-          .project-modal-details { width: 100% !important; height: 55% !important; }
+          .project-modal-container { flex-direction: column; overflow-y: auto; }
+          .project-modal-iframe-container { 
+            width: 100% !important; 
+            height: 60vh !important; 
+            border-right: none; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            display: flex !important; 
+            flex-shrink: 0;
+          }
+          .project-modal-details { 
+            width: 100% !important; 
+            height: auto !important; 
+            min-height: 40vh;
+          }
+          .project-modal-header { padding: 20px 24px !important; }
+          .project-modal-content { padding: 24px 20px !important; }
         }
       `}</style>
 
@@ -344,12 +357,15 @@ function ProjectModal({ project, onClose }) {
         transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
         style={{ background: "#0a0a0a", position: "relative" }}
       >
-        <div style={{
-          padding: "32px",
-          display: "flex", justifyContent: "space-between", alignItems: "flex-start",
-          borderBottom: "1px solid rgba(255,255,255,0.05)",
-          flexShrink: 0,
-        }}>
+        <div 
+          className="project-modal-header"
+          style={{
+            padding: "32px",
+            display: "flex", justifyContent: "space-between", alignItems: "flex-start",
+            borderBottom: "1px solid rgba(255,255,255,0.05)",
+            flexShrink: 0,
+          }}
+        >
           <div style={{
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: "10px", letterSpacing: "0.2em",
@@ -374,7 +390,10 @@ function ProjectModal({ project, onClose }) {
           </button>
         </div>
 
-        <div style={{ padding: "clamp(24px, 4vw, 40px) clamp(20px, 3vw, 32px)", overflowY: "auto", flex: 1 }}>
+        <div 
+          className="project-modal-content"
+          style={{ padding: "clamp(24px, 4vw, 40px) clamp(20px, 3vw, 32px)", overflowY: "auto", flex: 1 }}
+        >
           <h2 style={{
             fontFamily: "'Space Grotesk', sans-serif",
             fontSize: "clamp(28px, 2.6vw, 44px)",
