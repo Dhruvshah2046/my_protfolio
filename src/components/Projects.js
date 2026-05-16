@@ -373,32 +373,6 @@ function ProjectModal({ project, onClose }) {
           {!showInfo && <span style={{ opacity: 0.6 }}>ℹ</span>}
         </button>
 
-        {/* Back Button */}
-        <button
-          onClick={onClose}
-          style={{
-            position: "absolute",
-            top: "32px",
-            left: "32px",
-            zIndex: 1000,
-            width: "48px",
-            height: "48px",
-            background: "rgba(10,10,10,0.8)",
-            backdropFilter: "blur(10px)",
-            border: "1px solid rgba(255,255,255,0.1)",
-            borderRadius: "50%",
-            color: "white",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            transition: "all 0.3s ease",
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.background = "rgba(10,10,10,1)"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.background = "rgba(10,10,10,0.8)"; }}
-        >
-          <X size={24} />
-        </button>
       </div>
 
       <AnimatePresence>
