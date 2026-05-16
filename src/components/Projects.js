@@ -313,9 +313,9 @@ function ProjectModal({ project, onClose }) {
     >
       <style>{`
         .project-modal-container { flex-direction: row; }
-        .project-modal-iframe-container { width: 70%; height: 100%; border-right: 1px solid rgba(255,255,255,0.1); display: flex; }
-        .project-modal-details { width: 30%; height: 100%; display: flex; flex-direction: column; }
-        @media (max-width: 1024px) {
+        .project-modal-iframe-container { width: 60%; height: 100%; border-right: 1px solid rgba(255,255,255,0.1); display: flex; }
+        .project-modal-details { width: 40%; height: 100%; display: flex; flex-direction: column; }
+        @media (max-width: 1100px) {
           .project-modal-container { 
             flex-direction: column !important; 
             overflow-y: auto !important; 
